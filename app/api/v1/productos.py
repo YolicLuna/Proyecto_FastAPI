@@ -7,6 +7,8 @@ from app.deps.deps import require_admin
 from schemas.producto import ProductoCreate, ProductoResponse
 from crud.productos import *
 
+# Se crea un router específico para las rutas de productos,
+# lo que permite organizar mejor el código y separar las responsabilidades.
 api_router = APIRouter()
 
 # Ruta para listar todos los productos.

@@ -4,7 +4,7 @@ from jose import JWTError
 from sqlalchemy.orm import Session
 from app.db.database import session_local
 from deps import get_db
-from app.core.securyti import verificar_token
+from app.core.security import verificar_token
 import app.crud.usuario as usuario
 
 # Configuración de OAuth2 para la autenticación de usuarios.

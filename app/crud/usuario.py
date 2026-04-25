@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from app.models.usuario import Usuario
 from app.schemas.usuario import UsuarioCreate
-from app.core.securyti import hash_password
+from app.core.security import hash_password
 from sqlalchemy import or_
 
 # Funcion para obtener un usuario por su email.

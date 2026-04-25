@@ -15,6 +15,7 @@ def crear_token(sub:str, es_admin:bool):
         'es_admin': es_admin
     }
 
+    # Se genera el token JWT utilizando la clave secreta y el algoritmo especificados en la configuración.
     token = jwt.encode(data, setting.SECRET_KEY, algorithm=setting.ALGORITHM)
     return token
 

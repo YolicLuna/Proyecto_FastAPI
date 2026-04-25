@@ -6,6 +6,8 @@ from crud.categoria import *
 from app.deps.deps import get_db
 from app.deps.deps import require_admin
 
+# Se crea un router específico para las rutas de categorías,
+# lo que permite organizar mejor el código y separar las responsabilidades.
 api_router = APIRouter()
 
 # Ruta para crear una nueva categoria.

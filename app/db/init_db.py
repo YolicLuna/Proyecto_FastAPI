@@ -1,5 +1,5 @@
 from app.db.database import engine, Base
 
-# Creamos las tablas en la base de datos
+# Creamos las tablas en la base de datos utilizando el modelo definido en Base.
 Base.metadata.create_all(bind=engine)
 print('Tablas creadas correctamente.')

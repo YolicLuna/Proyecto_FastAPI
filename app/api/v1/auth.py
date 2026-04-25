@@ -2,14 +2,15 @@ from fastapi import Depends, HTTPException, status
 from app.deps.deps import get_db
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordRequestForm
-from app.core.securyti import crear_token, verify_password
+from app.core.security import crear_token, verify_password
 from deps.deps import get_current_user, require_admin
 from schemas.usuario import UsuarioResponse, UsuarioCreate
 from crud.usuario import obtener_usuario_por_email, crear_usuarios
 from fastapi import APIRouter
 from typing import cast
 
-
+# Se crea un router específico para las rutas de autenticación, 
+# lo que permite organizar mejor el código y separar las responsabilidades.
 api_router = APIRouter ()
 
 # Ruta para registrar un nuevo usuario.
