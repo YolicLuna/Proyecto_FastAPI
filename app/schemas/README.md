@@ -249,27 +249,8 @@ Token (independiente)
 
 ---
 
-## Patrón de Herencia de Schemas
-
-### Patrón Base → Create → Response
-
-```
-┌──────────────────┐
-│   ModeloBase     │  - Solo campos básicos/públicos
-└────────┬─────────┘
-         │
-    ┌────┴─────────────────────┬──────────────────┐
-    │                          │                  │
-┌───▼────────────────┐   ┌────▼──────────────┐   │
-│  ModeloCreate      │   │  ModeloResponse  │   │
-├────────────────────┤   ├──────────────────┤   │
-│ - Campos entrada   │   │ - ID generado BD │   │
-│ - Sin IDs          │   │ - Sin contraseña │   │
-│ - Validación JSON  │   │ - from_attributes│   │
-└────────────────────┘   └──────────────────┘   │
-                                                │
-Ejemplo: UsuarioBase → UsuarioCreate / UsuarioResponse
-```
+## Patrón de Herencia de Schemas.
+El uso de clases base (como `CategoriaBase` y `UsuarioBase`) permite evitar la repetición de campos comunes y mantener una estructura clara. Las clases específicas (`Create`, `Response`) heredan de la base y agregan o modifican campos según el contexto (entrada vs salida).
 
 ---
 
