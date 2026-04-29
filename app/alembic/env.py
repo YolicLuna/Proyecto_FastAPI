@@ -5,7 +5,12 @@ from pathlib import Path
 # Agregar la ruta raíz al sys.path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
-from app.models import categoria, producto, usuario
+from models.categoria import Categoria
+from models.pedidos import Pedido
+from models.pedidos import Carrito
+from models.pedidos import ItemCarrito
+from models.producto import Producto
+from models.usuario import Usuario
 from app.db.database import Base, engine
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
