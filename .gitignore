@@ -49,3 +49,16 @@ Thumbs.db
 # *.csv
 # *.xlsx
 # *.xls
+
+
+# Archivos de entorno
+.env
+.env.*
+*/.env
+
+# Entornos virtuales
+env/
+venv/
+
+# Python
+__pycache__/
