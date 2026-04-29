@@ -9,3 +9,24 @@ def obtener_carrito(db: Session, usuario_id: int):
         db.commit()
         db.refresh(carrito)
     return carrito
+
+def agregar_item( db: Session,
+        carrito_id: int,
+        producto_id: int,
+        cantidad: int = 1       
+):
+    item = db.query(ItemCarrito).filter(ItemCarrito.carrito_id == carrito_id, ItemCarrito.producto_id == producto_id).first()
+    if item is not None:
+        item.cantidad += 1
+    else:
+        item = ItemCarrito(carrito_id=carrito_id, producto_id=producto_id, cantidad=cantidad)
+        db.add(item)
+    db.commit()
+    db.refresh(item)
+    return item
+
+def eliminar_item(db:Session, item_id:int):
+    item = db.query(ItemCarrito).get(item_id)
+    if item:
+        db.delete(item)
+        db.commit()
