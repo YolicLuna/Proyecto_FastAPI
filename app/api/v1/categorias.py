@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from schemas.categoria import CategoriaResponse, CategoriaCreate
-from crud.categoria import * 
+from app.schemas.categoria import CategoriaResponse, CategoriaCreate
+from app.crud.categoria import * 
 from app.deps.deps import get_db
 from app.deps.deps import require_admin
 

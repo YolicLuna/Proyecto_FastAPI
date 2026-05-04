@@ -3,7 +3,6 @@ from fastapi import Depends, HTTPException, status
 from jose import JWTError
 from sqlalchemy.orm import Session
 from app.db.database import session_local
-from deps import get_db
 from app.core.security import verificar_token
 import app.crud.usuario as usuario
 

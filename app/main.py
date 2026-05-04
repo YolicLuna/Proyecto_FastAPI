@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Depends, HTTPException, status
-from api.v1.api import api_router
+from app.api.v1.api import api_router
 
 # Crear la aplicación FastAPI.
 app = FastAPI()

@@ -7,8 +7,8 @@ class Carrito(Base):
     __tablename__ = "carritos"
     id = Column(Integer, primary_key=True, index=True)
     usuarios_id = Column(Integer, ForeignKey("usuarios.id"))
-    usuario = relationship("Usuarios", back_populates="carrito")
-    items = relationship("ItemCarrito", back_populates="carritos", cascade="all, delete")
+    usuario = relationship("Usuario", back_populates="carrito")
+    items = relationship("ItemCarrito", back_populates="carrito", cascade="all, delete")
 
 class ItemCarrito(Base):
     __tablename__ = "item_carrito"
@@ -30,9 +30,9 @@ class Pedido(Base):
 class DetallePedido(Base):
     __tablename__ = "detalles_pedidos"
     id = Column(Integer, primary_key=True, index=True)
-    pedido_id = Column(Integer, ForeignKey("productos.id"))
+    pedido_id = Column(Integer, ForeignKey("pedidos.id"))
     producto_id = Column(Integer, ForeignKey("productos.id"))
     cantidad = Column(Integer)
     subtotal = Column(Float)
-    pedido = relationship("Pedido", back_populates="detalles")
+    pedido = relationship("Pedido", back_populates="detalle")
     producto = relationship("Producto")

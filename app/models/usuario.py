@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, Float, Boolean, ForeignKey
 from app.db.database import Base
+from sqlalchemy.orm import relationship
 
 # Clase para la tabla de usuarios en la base de datos.
 class Usuario(Base):
@@ -9,3 +10,4 @@ class Usuario(Base):
     email = Column(String(50), unique=True, index=True)
     hashed_password = Column(String(255))
     es_admin = Column(Boolean, default=False)
+    carrito = relationship("Carrito", back_populates="usuario", uselist=False)

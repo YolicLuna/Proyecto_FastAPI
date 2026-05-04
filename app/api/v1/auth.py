@@ -3,11 +3,16 @@ from app.deps.deps import get_db
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordRequestForm
 from app.core.security import crear_token, verify_password
-from deps.deps import get_current_user, require_admin
-from schemas.usuario import UsuarioResponse, UsuarioCreate
-from crud.usuario import obtener_usuario_por_email, crear_usuarios
+from app.deps.deps import get_current_user, require_admin
+from app.schemas.usuario import UsuarioResponse, UsuarioCreate
+from app.crud.usuario import obtener_usuario_por_email, crear_usuarios
 from fastapi import APIRouter
 from typing import cast
+from pydantic import BaseModel
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str
 
 # Se crea un router específico para las rutas de autenticación, 
 # lo que permite organizar mejor el código y separar las responsabilidades.
@@ -22,7 +27,7 @@ def registrar_usuario(usuario: UsuarioCreate, db:Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail=str(e))
 
 # Ruta para iniciar sesión y obtener un token JWT. 
-@api_router.post('/login', response_model=UsuarioResponse)
+@api_router.post('/login', response_model=TokenResponse)
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user = obtener_usuario_por_email(db, form_data.username)
     if not user:

@@ -4,8 +4,8 @@ from sqlalchemy.orm import Session
 import app.crud.usuario as usuario, app.schemas as schemas
 from app.deps.deps import get_db
 from app.deps.deps import require_admin
-from schemas.producto import ProductoCreate, ProductoResponse
-from crud.productos import *
+from app.schemas.producto import ProductoCreate, ProductoResponse
+from app.crud.productos import *
 
 # Se crea un router específico para las rutas de productos,
 # lo que permite organizar mejor el código y separar las responsabilidades.
