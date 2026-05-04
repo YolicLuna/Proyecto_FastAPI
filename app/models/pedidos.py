@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship
 from app.db.database import Base
 from datetime import datetime
 
+# Clases para el carrito de compras y pedidos.
 class Carrito(Base):
     __tablename__ = "carritos"
     id = Column(Integer, primary_key=True, index=True)
@@ -10,6 +11,7 @@ class Carrito(Base):
     usuario = relationship("Usuario", back_populates="carrito")
     items = relationship("ItemCarrito", back_populates="carrito", cascade="all, delete")
 
+# Clase para representar los productos en el carrito de compras.
 class ItemCarrito(Base):
     __tablename__ = "item_carrito"
     id = Column(Integer, primary_key=True, index=True)
@@ -19,6 +21,7 @@ class ItemCarrito(Base):
     carrito = relationship("Carrito", back_populates="items")
     producto = relationship("Producto")
 
+# Clases para representar los pedidos realizados por los usuarios.
 class Pedido(Base):
     __tablename__ = "pedidos"
     id = Column(Integer, primary_key=True, index=True)
@@ -27,6 +30,7 @@ class Pedido(Base):
     total = Column(Float)
     detalle = relationship("DetallePedido", back_populates="pedido")
 
+# Clase para representar los detalles de cada pedido, incluyendo los productos y cantidades.
 class DetallePedido(Base):
     __tablename__ = "detalles_pedidos"
     id = Column(Integer, primary_key=True, index=True)

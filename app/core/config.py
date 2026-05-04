@@ -1,7 +1,9 @@
 from pydantic_settings import BaseSettings
 from pathlib import Path
 
+# Se define la ruta al archivo .env, que se encuentra en el directorio raíz del proyecto.
 ENV_PATH = Path(__file__).resolve().parent.parent.parent / ".env"
+
 # Se define una clase de configuración utilizando Pydantic, 
 # que permite cargar las variables de entorno desde un archivo .env 
 # y acceder a ellas de manera sencilla en toda la aplicación.

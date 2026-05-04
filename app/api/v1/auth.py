@@ -10,6 +10,8 @@ from fastapi import APIRouter
 from typing import cast
 from pydantic import BaseModel
 
+# Se definen los modelos de respuesta para las rutas de autenticación, 
+# lo que permite una mejor documentación y validación de los datos.
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str
@@ -33,10 +35,14 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     if not user:
         raise HTTPException(status_code=401, detail='Credenciales invalidas')
     
+    # Se verifica la contraseña utilizando la función de verificación de contraseñas,
+    # y se lanza una excepción si las credenciales son inválidas.
     hashed_password: str = cast(str, user.hashed_password)
     if not verify_password(form_data.password, hashed_password):
         raise HTTPException(status_code=401, detail='Credenciales invalidas')
     
+    # Se crean los datos del token JWT utilizando el correo electrónico del usuario y su rol de administrador,
+    # y se devuelve el token en la respuesta.
     email: str = cast(str, user.email)
     es_admin: bool = cast(bool, user.es_admin)
     token = crear_token(sub=email, es_admin=es_admin)

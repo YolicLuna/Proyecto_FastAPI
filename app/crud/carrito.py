@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from app.models.pedidos import Carrito, ItemCarrito
 
+# Función para obtener o crear un carrito para un usuario específico.
 def obtener_carrito(db: Session, usuario_id: int):
     carrito = db.query(Carrito).filter(Carrito.usuarios_id == usuario_id).first()
     if not carrito:
@@ -10,6 +11,8 @@ def obtener_carrito(db: Session, usuario_id: int):
         db.refresh(carrito)
     return carrito
 
+# Función para agregar un producto al carrito. 
+# Si el producto ya existe en el carrito, se incrementa la cantidad.
 def agregar_item( db: Session,
         carrito_id: int,
         producto_id: int,
@@ -25,6 +28,7 @@ def agregar_item( db: Session,
     db.refresh(item)
     return item
 
+# Función para eliminar un producto del carrito.
 def eliminar_item(db:Session, item_id:int):
     item = db.query(ItemCarrito).get(item_id)
     if item:
