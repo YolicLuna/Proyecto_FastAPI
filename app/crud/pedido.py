@@ -4,7 +4,7 @@ from app.models.pedidos import Carrito, DetallePedido, Pedido
 
 # Funcion para crear un pedido a partir del carrito de un usuario.
 def crear_pedido(db:Session, usuario_id: int):
-    carrito = db.query(Carrito).filter_by(usuario_id=usuario_id).first()
+    carrito = db.query(Carrito).filter_by(usuarios_id=usuario_id).first()
     if not carrito or not carrito.items:
         raise ValueError("El carrito esta vacio")
     
@@ -21,7 +21,7 @@ def crear_pedido(db:Session, usuario_id: int):
             continue
         
         # Validamos que la cantidad solicitada sea mayor a 0 y menor o igual al stock disponible.
-        if item.cantidad > 0 and item.cantidad <= producto.stock:
+        if item.cantidad > 0 and item.cantidad <= (producto.stock or 0):
             producto.stock -= item.cantidad
             subtotal = producto.precio * item.cantidad
             detalle = DetallePedido(
@@ -40,4 +40,3 @@ def crear_pedido(db:Session, usuario_id: int):
         db.delete(item)
     db.commit()
     return pedido
-

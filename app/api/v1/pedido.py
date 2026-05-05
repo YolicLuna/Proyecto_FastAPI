@@ -8,7 +8,7 @@ api_router = APIRouter()
 
 # Endpoint para confirmar un pedido. 
 # Crea un nuevo pedido para el usuario autenticado.
-@api_router.post("/confirmar")
+@api_router.post("/confirmar", summary="Confirmar producto", response_description="Pedido creado correctamente")
 def confirmar_pedido(db:Session = Depends(get_db), user = Depends(get_current_user)):
     try:
         pedido = crud_pedido.crear_pedido(db, user.id)
