@@ -9,3 +9,5 @@ python-multipart
 bcrypt==4.0.1
 python-dotenv
 alembic
+pytest 
+httpx
