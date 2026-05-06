@@ -18,6 +18,7 @@ def agregar_item( db: Session,
         producto_id: int,
         cantidad: int = 1       
 ):
+    # Verificar si el producto ya existe en el carrito.
     item = db.query(ItemCarrito).filter(ItemCarrito.carrito_id == carrito_id, ItemCarrito.producto_id == producto_id).first()
     if item is not None:
         item.cantidad += 1

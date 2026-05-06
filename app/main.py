@@ -2,6 +2,8 @@ from fastapi import FastAPI, Depends, HTTPException, status
 from app.api.v1.api import api_router
 
 # Crear la aplicación FastAPI.
+# Se proporciona información adicional sobre la API, como el título, la descripción, la versión, la información de contacto y la licencia.
+# Esto ayuda a documentar la API y proporciona detalles útiles para los desarrolladores que interactúan con ella.
 app = FastAPI(
     title="E-commerce API",
     description="""
