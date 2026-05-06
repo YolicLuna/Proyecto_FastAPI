@@ -1,139 +1,149 @@
-# FastAPI Application.
+# FastAPI E-commerce API
 
-## Descripción General.
-
-Esta es la carpeta principal de la aplicación FastAPI que contiene toda la estructura y configuración del proyecto backend.
+API RESTful completa para la gestión de un E-commerce, desarrollada con FastAPI y SQLAlchemy. Incluye autenticación con JWT, administración de productos y categorías, carrito de compras y gestión de pedidos.
 
 ---
 
-## 📄 Archivos Principales
+## Descripción General
 
-### **main.py**
-
-Es el punto de entrada de la aplicación FastAPI. Encargado de:
-
-- Crear la instancia principal de la aplicación FastAPI.
-- Incluir el router de la API con el prefijo `/api/v1` para organizar todas las rutas bajo esa versión.
-
-**Para ejecutar la aplicación:**
-```bash
-python -m uvicorn main:app --reload
-```
-
-**Parámetros útiles:**
-- `--reload`: Reinicia el servidor automáticamente al detectar cambios (desarrollo).
-- `--port 8000`: Especifica el puerto (por defecto es 8000).
+Este proyecto implementa el backend de una tienda en línea. Permite a los usuarios registrarse, autenticarse, agregar productos a su carrito y confirmar pedidos. Los administradores pueden gestionar el catálogo de productos y categorías.
 
 ---
 
-### **requirements.txt**
+## Requisitos
 
-Archivo que contiene todas las dependencias del proyecto:
+- Python 3.10+
+- MySQL
 
-| Dependencia | Propósito |
-|---|---|
-| **fastapi** | Framework web moderno para construir APIs REST |
-| **uvicorn** | Servidor ASGI para ejecutar la aplicación FastAPI |
-| **SQLAlchemy** | ORM para interacción con la base de datos |
-| **PyMySQL** | Driver MySQL para conexión a la BD |
-| **passlib[bcrypt]** | Librería para hash seguro de contraseñas |
-| **python-jose[cryptography]** | Implementación de JSON Web Tokens (JWT) para autenticación |
-| **email-validator** | Validación de direcciones de correo electrónico |
-| **python-multipart** | Soporte para formularios multipart en FastAPI |
-| **bcrypt** | Hashing criptográfico para contraseñas |
-| **python-dotenv** | Carga de variables de entorno desde archivos `.env` |
-| **alembic** | Herramienta para migraciones de base de datos |
+---
 
-**Para instalar las dependencias:**
+## Inicio Rápido
+
+**1. Instalar dependencias:**
 ```bash
 pip install -r requirements.txt
 ```
 
----
-
-### **Data_base.sql**
-
-Archivo SQL que contiene los comandos iniciales para configurar la base de datos:
-
-```sql
-CREATE DATABASE IF NOT EXISTS api;  -- Crea la BD si no existe
-USE api;                             -- Selecciona la BD a utilizar
-SHOW DATABASES;                      -- Lista todas las BD
-SHOW TABLES;                         -- Lista las tablas de la BD actual
+**2. Configurar variables de entorno** creando un archivo `.env` en la raíz:
+```
+SECRET_KEY=tu_clave_secreta
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+DATABASE_URL=mysql+pymysql://usuario:contraseña@localhost:3306/api
 ```
 
-**Para ejecutar este archivo en MySQL:**
+**3. Inicializar la base de datos:**
 ```bash
 mysql -u usuario -p < Data_base.sql
 ```
 
----
-
-### **alembic/**
-
-**Propósito:**
-Alembic es una herramienta de migraciones de base de datos que permite versionear los cambios en la estructura de la BD de forma ordenada y controlada.
-
-**Uso en el proyecto:**
-
-- **Crear migraciones**: Cuando se modifican los modelos SQLAlchemy, Alembic genera scripts de migración que registran esos cambios.
-- **Aplicar cambios**: Las migraciones se pueden aplicar incrementalmente a la BD.
-- **Historial de cambios**: Mantiene un historial de todas las versiones de la BD.
-
-**Archivos importantes:**
-- `alembic.ini`: Configuración de Alembic.
-- `env.py`: Script de configuración del entorno de migraciones.
-- `versions/`: Carpeta que almacena los scripts de migración versionados.
-
-**Comandos útiles:**
+**4. Ejecutar la aplicación:**
 ```bash
-alembic revision --autogenerate -m "Descripción del cambio"  # Crear nueva migración
-alembic upgrade head                                           # Aplicar todas las migraciones
-alembic downgrade -1                                           # Revertir última migración
+python -m uvicorn main:app --reload
 ```
 
+**5. Acceder a la documentación interactiva:**
+- Swagger UI: http://localhost:8000/docs
+- ReDoc: http://localhost:8000/redoc
+
 ---
 
-## 📁 Estructura del Proyecto
+## Estructura del Proyecto
 
 ```
 app/
-├── main.py                 # Punto de entrada de la aplicación.
-├── requirements.txt        # Dependencias del proyecto.
-├── Data_base.sql          # Script de inicialización de BD.
-├── alembic.ini            # Configuración de Alembic.
-├── api/                   # Rutas y endpoints de la API.
-├── core/                  # Configuración y seguridad.
-├── crud/                  # Operaciones CRUD para modelos.
-├── db/                    # Configuración de base de datos.
-├── deps/                  # Dependencias compartidas.
-├── models/                # Modelos SQLAlchemy.
-├── schemas/               # Esquemas Pydantic (validación).
-└── alembic/              # Migraciones de base de datos.
+├── main.py              # Punto de entrada de la aplicación
+├── requirements.txt     # Dependencias del proyecto
+├── Data_base.sql        # Script de inicialización de la BD
+├── alembic.ini          # Configuración de Alembic
+├── api/                 # Rutas y endpoints de la API (v1)
+├── core/                # Configuración y seguridad
+├── crud/                # Operaciones de base de datos
+├── db/                  # Configuración de la conexión a BD
+├── deps/                # Dependencias inyectables de FastAPI
+├── models/              # Modelos SQLAlchemy
+├── schemas/             # Esquemas Pydantic
+└── tests/               # Pruebas automatizadas
 ```
 
 ---
 
-## 🚀 Inicio Rápido
+## Endpoints Disponibles
 
-1. **Instalar dependencias:**
-   ```bash
-   pip install -r requirements.txt
-   ```
+### Autenticación — `/api/v1/auth`
+| Método | Ruta | Descripción | Autenticación |
+|--------|------|-------------|---------------|
+| POST | /usuarios | Registrar nuevo usuario | No |
+| POST | /login | Iniciar sesión y obtener token JWT | No |
+| GET | /usuarios/me | Obtener perfil del usuario autenticado | Sí |
+| GET | /admin/ping | Endpoint de prueba para administradores | Admin |
 
-2. **Configurar la base de datos:**
-   ```bash
-   mysql -u usuario -p < Data_base.sql
-   ```
+### Productos — `/api/v1/producto`
+| Método | Ruta | Descripción | Autenticación |
+|--------|------|-------------|---------------|
+| GET | / | Listar todos los productos | No |
+| POST | /productos | Crear nuevo producto | Admin |
+| PUT | /productos/{id} | Actualizar producto | Admin |
+| DELETE | /productos/{id} | Eliminar producto | Admin |
 
-3. **Ejecutar la aplicación:**
-   ```bash
-   python -m uvicorn main:app --reload
-   ```
+### Categorías — `/api/v1/categorias`
+| Método | Ruta | Descripción | Autenticación |
+|--------|------|-------------|---------------|
+| GET | /categorias | Listar todas las categorías | No |
+| POST | /categorias | Crear nueva categoría | Sí |
 
-4. **Acceder a la documentación interactiva:**
-   - Swagger UI: http://localhost:8000/docs
-   - ReDoc: http://localhost:8000/redoc
+### Carrito — `/api/v1/carrito`
+| Método | Ruta | Descripción | Autenticación |
+|--------|------|-------------|---------------|
+| GET | / | Ver contenido del carrito | Sí |
+| POST | /agregar/{producto_id} | Agregar producto al carrito | Sí |
+| DELETE | /eliminar/{item_id} | Eliminar producto del carrito | Sí |
+
+### Pedidos — `/api/v1/pedido`
+| Método | Ruta | Descripción | Autenticación |
+|--------|------|-------------|---------------|
+| POST | /confirmar | Confirmar pedido desde el carrito | Sí |
 
 ---
 
+## Dependencias Principales
+
+| Dependencia | Propósito |
+|-------------|-----------|
+| fastapi | Framework web para construir la API |
+| uvicorn | Servidor ASGI para ejecutar la aplicación |
+| SQLAlchemy | ORM para interacción con la base de datos |
+| PyMySQL | Driver MySQL |
+| passlib[bcrypt] | Hash seguro de contraseñas |
+| python-jose[cryptography] | Generación y validación de tokens JWT |
+| email-validator | Validación de correos electrónicos |
+| python-multipart | Soporte para formularios en FastAPI |
+| bcrypt==4.0.1 | Backend de hashing criptográfico para passlib |
+| python-dotenv | Carga de variables de entorno desde `.env` |
+| alembic | Migraciones de base de datos |
+| pytest | Framework para pruebas automatizadas |
+| httpx | Cliente HTTP requerido por TestClient de FastAPI |
+
+---
+
+## Seguridad
+
+La autenticación se implementa con tokens JWT. Las contraseñas se almacenan siempre hasheadas con bcrypt. Los endpoints sensibles requieren un token válido en el header `Authorization: Bearer <token>`, y los endpoints administrativos verifican adicionalmente el campo `es_admin` del usuario.
+
+---
+
+## Pruebas
+
+```bash
+cd app
+pytest -v
+```
+
+Las pruebas cubren autenticación, validación de datos y operaciones CRUD de productos.
+
+---
+
+## Autor
+
+José Yolic — Equipo Backend
+[GitHub](https://github.com/YolicLuna/Proyecto_FastAPI) · yolicdev@gmail.com

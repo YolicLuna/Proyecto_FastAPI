@@ -25,45 +25,55 @@ token_expiry = setting.ACCESS_TOKEN_EXPIRE_MINUTES
 ```
 
 ### `security.py`
-**Propósito:** Funciones de seguridad y autenticación.
+**Propósito:** Funciones de seguridad y autenticación para la aplicación.
 
 Proporciona utilidades para:
-- Hashing de contraseñas.
+- Hashing seguro de contraseñas usando bcrypt.
 - Validación de contraseñas.
 - Generación de tokens JWT.
-- Verificación de tokens JWT.
+- Verificación y decodificación de tokens JWT.
+
+**Configuración:**
+- Contexto de hashing: Utiliza `bcrypt` como esquema para el hashing de contraseñas.
+- Algoritmo JWT: Usa el algoritmo especificado en `config.py` (por defecto "HS256").
 
 **Funciones principales:**
 
 #### `hash_password(password: str) -> str`
 - Realiza hash de una contraseña usando bcrypt.
-- Utilizando para almacenar contraseñas de forma segura en la base de datos.
+- Utilizada para almacenar contraseñas de forma segura en la base de datos.
 - Retorna el hash de la contraseña.
 
 #### `verify_password(password: str, hashed: str) -> bool`
-- Verifica que una contraseña coincida con su hash.
+- Verifica que una contraseña coincida con su hash almacenado.
 - Usada durante el login para validar credenciales.
 - Retorna `True` si las contraseñas coinciden, `False` en caso contrario.
 
 #### `crear_token(sub: str, es_admin: bool) -> str`
 - Genera un token JWT con información del usuario.
-- Incluye el correo del usuario (`sub`), estado de administrador (`es_admin`) y fecha de expiración.
-- Firma el token usando `SECRET_KEY` y `ALGORITHM` de la configuración.
-- Retorna el token JWT codificado.
+- Parámetros:
+  - `sub`: Correo electrónico del usuario (subject).
+  - `es_admin`: Booleano indicando si el usuario tiene permisos de administrador.
+- Incluye fecha de expiración basada en `ACCESS_TOKEN_EXPIRE_MINUTES`.
+- Retorna el token JWT firmado y codificado.
 
 #### `verificar_token(token: str) -> dict | None`
-- Decodifica y verifica un token JWT.
+- Verifica y decodifica un token JWT.
 - Retorna el payload del token si es válido.
 - Retorna `None` si el token es inválido o ha expirado.
-
-**Configuración de seguridad:**
-- **Algoritmo de hashing:** bcrypt (estándar de la industria).
-- **Algoritmo JWT:** HS256 (HMAC con SHA-256).
-- **Expiración:** Configurable a través de `ACCESS_TOKEN_EXPIRE_MINUTES`.
+- Utiliza la clave secreta y algoritmo definidos en la configuración.
 
 ## Flujo de Seguridad
 
-1. **Registro:** La contraseña se hashea con `hash_password()` antes de almacenarse.
-2. **Login:** Se verifica la contraseña con `verify_password()` y se genera un token con `crear_token()`.
-3. **Autenticación:** Cada solicitud incluye el token, que se verifica con `verificar_token()`.
-4. **Autorización:** El payload del token incluye el campo `es_admin` para control de acceso.
+1. **Registro:** Se captura la contraseña → se realiza hash con `hash_password()` → se almacena en BD.
+2. **Login:** Se verifica contraseña con `verify_password()` → si es válida, se genera token con `crear_token()` → se devuelve token.
+3. **Acceso a recursos protegidos:** Se valida token con `verificar_token()` → se extrae información del usuario → se permite acceso.
+4. **Almacenamiento de tokens:** Se usan en cabecera `Authorization: Bearer <token>`.
+
+## Consideraciones de Seguridad
+
+- **Algoritmo de hashing:** bcrypt (estándar de la industria).
+- **Algoritmo JWT:** HS256 (HMAC con SHA-256).
+- **Expiración:** Configurable a través de `ACCESS_TOKEN_EXPIRE_MINUTES` en el archivo `.env`.
+- **Secret Key:** Debe ser una clave fuerte y secreta, almacenada en el archivo `.env`.
+- **Payload del token:** Incluye `sub` (email), `es_admin` (rol) y `exp` (expiración).
