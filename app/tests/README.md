@@ -1,4 +1,4 @@
--# Tests - Documentación
+# Tests - Documentación
 
 Este directorio contiene las pruebas automatizadas de la API, escritas con `pytest` y el `TestClient` de FastAPI. Las pruebas verifican el comportamiento de los endpoints sin necesidad de levantar el servidor manualmente.
 
