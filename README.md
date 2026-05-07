@@ -6,7 +6,27 @@ API RESTful completa para la gestión de un E-commerce, desarrollada con FastAPI
 
 ## Descripción General
 
-Este proyecto implementa el backend de una tienda en línea. Permite a los usuarios registrarse, autenticarse, agregar productos a su carrito y confirmar pedidos. Los administradores pueden gestionar el catálogo de productos y categorías.
+Este proyecto consiste en una API RESTful desarrollada con FastAPI y SQLAlchemy, orientada a la gestión completa de un sistema de comercio electrónico. La aplicación permite a los usuarios registrarse, autenticarse mediante tokens JWT, explorar un catálogo de productos, administrar su 
+carrito de compras y confirmar pedidos. Los administradores cuentan con privilegios adicionales para gestionar productos y categorías del sistema.
+### Tecnologías Utilizadas
+El proyecto está construido sobre FastAPI como framework principal para la definición de endpoints y la gestión de solicitudes HTTP. SQLAlchemy actúa como ORM para el manejo de la base de datos relacional MySQL, a la que se conecta a través del driver PyMySQL. La validación y serialización de datos se realiza con Pydantic. La autenticación se implementa con JSON Web Tokens mediante la librería python-jose, y el hashing de contraseñas se gestiona con passlib y bcrypt. La configuración del entorno se administra con python-dotenv, y las migraciones de base de datos se manejan con Alembic. Las pruebas automatizadas utilizan pytest junto con httpx y el TestClient de FastAPI.
+
+### Arquitectura del Proyecto
+El proyecto sigue una arquitectura de capas claramente separadas. La capa de modelos define la estructura de las tablas en la base de datos mediante clases SQLAlchemy. La capa de esquemas contiene las clases Pydantic encargadas de validar los datos de entrada y serializar las respuestas. La capa CRUD centraliza todas las operaciones de acceso a datos, separando la lógica de negocio de los endpoints. La capa de dependencias provee funciones reutilizables para la inyección de sesiones de base de datos y la validación de autenticación. Finalmente, la capa de API organiza los endpoints en módulos independientes agrupados bajo el prefijo /api/v1.
+
+### Modelos de la Base de Datos
+El sistema cuenta con cinco entidades principales. La entidad Categoría almacena las categorías del catálogo, cada una con un nombre único. La entidad Producto representa los artículos disponibles en la tienda, con campos de nombre, precio, disponibilidad en stock, cantidad en inventario y referencia a su categoría. La entidad Usuario guarda la información de autenticación de los usuarios, incluyendo nombre, correo electrónico, contraseña hasheada y un indicador de rol administrativo. La entidad Carrito representa el carrito de compras activo de cada usuario, que puede contener múltiples ítems a través de la entidad ItemCarrito. Para los pedidos confirmados, existen las entidades Pedido y DetallePedido, que 
+registran el total de la compra, la fecha y el detalle de cada producto adquirido.
+
+### Seguridad y Autenticación
+La seguridad del sistema se basa en dos pilares. El primero es el hashing de contraseñas con bcrypt, que garantiza que ninguna contraseña se almacene en texto plano en la base de datos. El segundo es la autenticación mediante tokens JWT, que se generan al momento del inicio de sesión e incluyen el correo del usuario, su rol y una fecha de expiración configurable. Los endpoints protegidos validan el token en cada solicitud, y los endpoints administrativos adicionalmente verifican que el usuario tenga el atributo es_admin activado. Las contraseñas y el token nunca se exponen en las respuestas de la API.
+
+### Flujo de Compra
+El flujo de compra inicia cuando un usuario autenticado agrega productos a su carrito mediante el endpoint correspondiente. Si el producto ya existe en el carrito, la cantidad se incrementa automáticamente. Una vez listo, el usuario puede confirmar el pedido, momento en el que el sistema valida que el carrito no este vacío, verifica la disponibilidad de stock de cada producto, calcula el total del pedido, genera los registros de detalle, descuenta el inventario y limpia el carrito. Si un producto no tiene stock suficiente o no está disponible, ese ítem se omite del pedido.
+
+### Pruebas Automatizadas
+El proyecto incluye pruebas automatizadas escritas con pytest y el TestClient de FastAPI. Las pruebas cubren la validación de credenciales incorrectas en el login, la disponibilidad de la documentación automática de Swagger, la creación exitosa de productos con datos válidos, la respuesta de error ante datos incompletos, y el listado del catálogo de productos. Las pruebas no requieren levantar el servidor manualmente, ya que el TestClient simula las solicitudes HTTP directamente sobre la aplicación.
+
 
 ---
 
